@@ -34,7 +34,7 @@ A script to perform digital TRFLP.
 An example usage is the following:
 "$ pyrotrfid samples/sff/ --enzyme HaeIII"
 More documentation is available at:
-http://xapple.github.com/pyrotrfid/
+http://bbcf.epfl.ch/PyroTRF-ID/
 """
 
 # The optional arguments #

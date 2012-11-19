@@ -1,7 +1,7 @@
 """
-================
-Warping programs
-================
+=================
+Wrapping programs
+=================
 
 The ``@command`` decorator makes binding command line executables
 easy to write and easy to use.
@@ -29,7 +29,7 @@ For example, to wrap ``touch``, we write a one argument function that
 takes the filename of the file to touch, and apply the ``@command``
 decorator to it::
 
-    from plumbing import command
+    from pyrotrfid.cmd import command
 
     @command
     def touch(filename):
@@ -45,7 +45,7 @@ the touched file.
 
 A more complicated example would include binding the BLASTP algorithm::
 
-    from plumbing import command
+    from pyrotrfid.cmd import command
 
     @command
     def blastp(database, sequences, **kwargs):
@@ -183,11 +183,11 @@ class Future(object):
         except KeyboardInterrupt as err:
             print "You aborted the process pid %i. It was: %s " % (self.proc.pid, self.cmd_dict["arguments"])
             raise err
-        # Read result #
+        # Read the result #
         stdout, stderr = self.proc.stdout.read(),  self.proc.stderr.read()
         # Check for failure #
         if return_code != 0: raise CommandFailed(self.cmd_dict["arguments"], stderr)
-        # Return result #
+        # Return the result #
         result = self.cmd_dict.get("return_value")
         if callable(result): return result(stdout, stderr)
         elif result == 'stdout': return stdout

@@ -28,7 +28,7 @@ delimiter = ";"
 
 ################################################################################
 class Job(object):
-    """Every time the ``pyrotrfid`` script is run, a job is created.
+    """Every time the ``pyrotrfid`` script is run, a Job is created.
 
     :param samples_path: Path to sff files directory.
     :type  samples_path: str

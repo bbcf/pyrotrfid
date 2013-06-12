@@ -185,7 +185,7 @@ class Job(object):
     @property_cached
     def reference_path(self):
         """Path to specially built green genes database."""
-        files = "/db/pytrfid/2011-greengenes/" #glob.glob(self.input_dir + "*.amb")
+        files = glob.glob(self.input_dir + "*.amb") # "/db/pytrfid/2011-greengenes/"
         if not files: raise Exception("AMB files not found.")
         return os.path.splitext(files[0])[0]
 

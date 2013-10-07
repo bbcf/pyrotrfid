@@ -47,7 +47,7 @@ class Job(object):
 
     def run(self):
         """Run the job to completion."""
-        self.print_info()
+        self.print_starting_info()
         #-------------------------------#
         print "Writing job parameters..."
         with open(self.output_dir + "job_parameters.txt", 'w') as file:
@@ -126,7 +126,7 @@ class Job(object):
         """All the job parameters."""
         return dict(((k,v) for k,v in sorted(self.__dict__.items()) if not k.startswith('__')))
 
-    def print_info(self):
+    def print_starting_info(self):
         """Display some info before the job starts"""
         print Color.f_pur + "Starting job on %s" % time.asctime() + Color.end
         for k,v in self.parameters.items(): print (Color.ylw + k + ":" + Color.end).ljust(32) + str(v)
@@ -154,13 +154,6 @@ class Job(object):
         return value
 
     @property_cached
-    def output_dir(self):
-        """Results will fall in here."""
-        value = self.input_dir + "pyrotrfid/"
-        if not os.path.exists(value): os.makedirs(value)
-        return value
-
-    @property_cached
     def input_dir(self):
         """Input files will be searched for in here."""
         value = self.samples_path
@@ -169,24 +162,33 @@ class Job(object):
         return value
 
     @property_cached
+    def output_dir(self):
+        """Results will fall in here."""
+        #value = self.input_dir + "pyrotrfid/"
+        value = "/scratch/cluster/weekly/lbe/pyrotrfid_output/%s/" % os.path.basename(self.samples_path)
+        if not os.path.exists(value): os.makedirs(value)
+        return value
+
+    @property_cached
     def wetlab_profile_path(self):
         """Path to original wet lab TRFLP profile"""
-        value = self.input_dir + "original_profile.csv"
+        value = os.path.join(self.input_dir, "original_profile.csv")
         if not os.path.exists(value): return False
         return value
 
     @property_cached
     def qiime_mapping_file(self):
         """Path to 'mapping' file that qiime uses at some moment."""
-        value = self.input_dir + "qiime_mapping.txt"
+        value = os.path.join(self.input_dir, "qiime_mapping.txt")
         if self.qiime and not os.path.exists(value): raise Exception("Mapping file '%s' not found." % value)
         return value
 
     @property_cached
     def reference_path(self):
-        """Path to specially built green genes database."""
-        files = glob.glob(self.input_dir + "*.amb") # "/db/pytrfid/2011-greengenes/"
-        if not files: raise Exception("AMB files not found.")
+        """Path to specially built greengenes database."""
+        #files = glob.glob(self.input_dir + "*.amb") # "/db/pyrotrfid/2011-greengenes/"
+        files = glob.glob("/archive/epfl/lbe/dweissbr/index/greengenes/*.amb")
+        if not files: raise Exception("Index (.amb files) not found.")
         return os.path.splitext(files[0])[0]
 
     @property_cached
@@ -710,3 +712,4 @@ class Fragment(object):
         self.sw_norm = '%.3g' % (float(sw_score) / read_length)
 
     def __repr__(self): return '<%s object "%s">' % (self.__class__.__name__, self.name)
+
